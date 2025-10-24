@@ -31,6 +31,10 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -80,10 +84,39 @@ export default {
             height: "0",
           },
         },
+        "progress-fill": {
+          from: {
+            width: "0%",
+          },
+          to: {
+            width: "100%",
+          },
+        },
+        "spin-slow": {
+          from: {
+            transform: "rotate(0deg)",
+          },
+          to: {
+            transform: "rotate(360deg)",
+          },
+        },
+        "fade-in": {
+          from: {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "progress-fill": "progress-fill 10s linear",
+        "spin-slow": "spin-slow 1s linear infinite",
+        "fade-in": "fade-in 0.4s ease-out",
       },
     },
   },

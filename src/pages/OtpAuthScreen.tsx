@@ -1,0 +1,178 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { SecureCard } from "@/components/ui/secure-card";
+import { InfoBox } from "@/components/InfoBox";
+import { CountdownTimer } from "@/components/CountdownTimer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Lock, CreditCard } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
+
+const OtpAuthScreen = () => {
+  const navigate = useNavigate();
+  const [otp, setOtp] = useState("");
+  const [showSimulationModal, setShowSimulationModal] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (otp.length !== 6) {
+      toast.error("Please enter a 6-digit OTP");
+      return;
+    }
+    setShowSimulationModal(true);
+  };
+
+  const handleSimulate = (success: boolean) => {
+    setShowSimulationModal(false);
+    if (success) {
+      navigate("/success");
+    } else {
+      navigate("/failure");
+    }
+  };
+
+  const handleResend = () => {
+    toast.success("OTP has been resent to your registered contact");
+    setOtp("");
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Header with logos */}
+        <div className="flex items-center justify-between mb-6 px-2">
+          <div className="flex items-center gap-2">
+            <Lock className="w-5 h-5 text-primary" />
+            <span className="text-sm font-semibold text-foreground">Demo Bank</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="text-xs font-semibold px-3 py-1 bg-primary text-primary-foreground rounded">
+              VISA
+            </div>
+            <div className="text-xs font-semibold px-3 py-1 bg-primary text-primary-foreground rounded">
+              Mastercard
+            </div>
+          </div>
+        </div>
+
+        <SecureCard>
+          <div className="space-y-6">
+            {/* Title */}
+            <div className="text-center space-y-2">
+              <h1 className="text-2xl font-bold text-foreground">
+                Cardholder Authentication
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Please verify your transaction by entering the One-Time Password (OTP) sent to your registered mobile number/email.
+              </p>
+            </div>
+
+            {/* Demo info box */}
+            <InfoBox>
+              <div className="space-y-2">
+                <p className="font-semibold text-foreground">
+                  For demo/testing environment enter: <span className="font-mono">123456</span>
+                </p>
+                <p>
+                  This is a test environment — no real money will be deducted. The payment gateway is currently in test mode.
+                </p>
+              </div>
+            </InfoBox>
+
+            {/* Transaction details */}
+            <div className="bg-secondary rounded-lg p-4 space-y-2">
+              <div className="flex items-center gap-2 text-sm">
+                <CreditCard className="w-4 h-4 text-muted-foreground" />
+                <span className="text-muted-foreground">Card ending in</span>
+                <span className="font-mono font-semibold text-foreground">•••• 4321</span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Transaction amount:</span>
+                <span className="text-lg font-bold text-foreground">$150.00</span>
+              </div>
+            </div>
+
+            {/* OTP input form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="otp" className="text-sm font-medium text-foreground">
+                  Enter OTP
+                </label>
+                <Input
+                  id="otp"
+                  type="text"
+                  maxLength={6}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                  placeholder="000000"
+                  className="text-center text-2xl font-mono tracking-widest"
+                />
+                <div className="text-center text-sm text-muted-foreground">
+                  OTP expires in <CountdownTimer seconds={120} format="mm:ss" />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Button type="submit" className="w-full" size="lg">
+                  Submit
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleResend}
+                >
+                  Resend OTP
+                </Button>
+              </div>
+            </form>
+
+            {/* Security footer */}
+            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground pt-2">
+              <Lock className="w-3 h-3" />
+              <span>Your details are protected and encrypted.</span>
+            </div>
+          </div>
+        </SecureCard>
+      </div>
+
+      {/* Simulation Modal */}
+      <Dialog open={showSimulationModal} onOpenChange={setShowSimulationModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Simulate Authentication Result</DialogTitle>
+            <DialogDescription>
+              Choose the outcome for this demo authentication flow.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 pt-4">
+            <Button
+              onClick={() => handleSimulate(true)}
+              className="w-full bg-success hover:bg-success/90"
+              size="lg"
+            >
+              Simulate Success
+            </Button>
+            <Button
+              onClick={() => handleSimulate(false)}
+              variant="destructive"
+              className="w-full"
+              size="lg"
+            >
+              Simulate Failure
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default OtpAuthScreen;
