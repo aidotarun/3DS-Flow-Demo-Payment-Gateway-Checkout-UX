@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SecureCard } from "@/components/ui/secure-card";
+import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
 
 const SuccessScreen = () => {
@@ -9,7 +10,7 @@ const SuccessScreen = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate("/");
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [navigate]);
@@ -33,13 +34,27 @@ const SuccessScreen = () => {
             <p className="text-sm text-muted-foreground">
               Your payment has been authenticated. Returning to merchant...
             </p>
+            <p className="text-xs text-muted-foreground">
+              You will be redirected automatically.
+            </p>
           </div>
 
           {/* Loading indicator */}
-          <div className="flex justify-center gap-2 pt-4">
+          <div className="flex justify-center gap-2 pt-2">
             <div className="w-2 h-2 rounded-full bg-success animate-bounce" style={{ animationDelay: "0ms" }} />
             <div className="w-2 h-2 rounded-full bg-success animate-bounce" style={{ animationDelay: "150ms" }} />
             <div className="w-2 h-2 rounded-full bg-success animate-bounce" style={{ animationDelay: "300ms" }} />
+          </div>
+
+          {/* Manual override button */}
+          <div className="pt-4">
+            <Button
+              variant="outline"
+              onClick={() => navigate("/")}
+              className="w-full"
+            >
+              Return to Merchant
+            </Button>
           </div>
         </div>
       </SecureCard>

@@ -86,16 +86,28 @@ const OtpAuthScreen = () => {
               </div>
             </InfoBox>
 
-            {/* Transaction details */}
-            <div className="bg-secondary rounded-lg p-4 space-y-2">
-              <div className="flex items-center gap-2 text-sm">
-                <CreditCard className="w-4 h-4 text-muted-foreground" />
-                <span className="text-muted-foreground">Card ending in</span>
-                <span className="font-mono font-semibold text-foreground">•••• 4321</span>
+            {/* Transaction summary block */}
+            <div className="bg-secondary rounded-lg p-4 space-y-3">
+              <div className="flex items-start gap-2 text-sm">
+                <CreditCard className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                <div className="space-y-2 flex-1">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Card:</span>
+                    <span className="font-mono font-semibold text-foreground">•••• 4321</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Merchant:</span>
+                    <span className="font-semibold text-foreground">ExampleStore.com</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Amount:</span>
+                    <span className="text-lg font-bold text-foreground">INR 1,234.56</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-muted-foreground">Transaction amount:</span>
-                <span className="text-lg font-bold text-foreground">$150.00</span>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border">
+                <Lock className="w-3 h-3" />
+                <span>Your details are protected and encrypted.</span>
               </div>
             </div>
 
@@ -134,10 +146,9 @@ const OtpAuthScreen = () => {
               </div>
             </form>
 
-            {/* Security footer */}
-            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground pt-2">
-              <Lock className="w-3 h-3" />
-              <span>Your details are protected and encrypted.</span>
+            {/* Help footer */}
+            <div className="text-center text-xs text-muted-foreground pt-2 border-t border-border">
+              Need help? Contact your bank.
             </div>
           </div>
         </SecureCard>
@@ -147,9 +158,9 @@ const OtpAuthScreen = () => {
       <Dialog open={showSimulationModal} onOpenChange={setShowSimulationModal}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Simulate Authentication Result</DialogTitle>
+            <DialogTitle>Simulation Result</DialogTitle>
             <DialogDescription>
-              Choose the outcome for this demo authentication flow.
+              Choose the result you want to simulate for this authentication attempt.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 pt-4">
@@ -168,6 +179,9 @@ const OtpAuthScreen = () => {
             >
               Simulate Failure
             </Button>
+            <p className="text-xs text-center text-muted-foreground pt-2">
+              In production this step will be automatic based on the bank's response.
+            </p>
           </div>
         </DialogContent>
       </Dialog>

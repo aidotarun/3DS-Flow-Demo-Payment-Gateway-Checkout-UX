@@ -34,14 +34,14 @@ const FailureScreen = () => {
               className="w-full"
               size="lg"
             >
-              Try Again
+              Retry Authentication
             </Button>
             <Button
               onClick={() => navigate("/")}
               variant="outline"
               className="w-full"
             >
-              Return to Start
+              Return to Merchant
             </Button>
           </div>
         </div>
