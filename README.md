@@ -1,73 +1,184 @@
-# Welcome to your Lovable project
+# 🛡️ 3DS Flow Demo — Payment Gateway Checkout UX (Public Design)
 
-## Project info
+This repository showcases a **complete, production-grade 3D Secure (3DS) authentication flow** used in modern Payment Gateway checkout systems.
+It has been designed by **[ITIO Innovex Pvt Ltd](https://www.itio.in)** — a global fintech software provider specializing in white-label payment gateway and digital banking solutions.
 
-**URL**: https://lovable.dev/projects/9e68d3f4-64bf-4c82-9b99-327df040ce4e
+> 💡 **Open Source & Public Use:**
+> This design is publicly available so developers, designers, and fintech startups can study, customize, or integrate it into their sandbox or PCI-DSS compliant environments.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 📘 Overview
 
-**Use Lovable**
+The **3DS Flow Demo** covers every customer-facing step after checkout, showing what happens during authentication with a user’s issuing bank.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9e68d3f4-64bf-4c82-9b99-327df040ce4e) and start prompting.
+| Phase | Folder                      | Description                                                                          |
+| ----- | --------------------------- | ------------------------------------------------------------------------------------ |
+| 1️⃣   | `/phase1_redirect_screen/`  | Redirect / Verification screen — simulates secure redirect and fraud-check animation |
+| 2️⃣   | `/phase2_otp_auth_screen/`  | 3D Secure OTP authentication page (bank-style UI)                                    |
+| 3️⃣   | `/phase3_simulation_modal/` | Sandbox modal for simulating success/failure outcomes                                |
+| 4️⃣   | `/phase4_result_success/`   | Payment authentication successful screen                                             |
+| 5️⃣   | `/phase5_result_failure/`   | Payment authentication failed screen                                                 |
+| ⚙️    | `/tokens_components/`       | Shared tokens, icons, and reusable UI components                                     |
 
-Changes made via Lovable will be committed automatically to this repo.
+Each folder is a **microservice-ready module** — easy to embed, modify, or plug into real payment gateway flows.
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🧩 Tech & Design Stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+| Layer            | Tools / Languages                                                |
+| ---------------- | ---------------------------------------------------------------- |
+| 🎨 Design        | React Design using lovable AI   |
+| 🧱 Frontend Code | React + TailwindCSS (exportable components)                      |
+| 📐 Layout        | Responsive grid for desktop & mobile                             |
+| 💡 Typography    | Inter / SF Pro / System UI stack                                 |
+| 🔐 Accessibility | WCAG AA contrast, keyboard focus, 44px tap height                |
+| 🎬 Motion        | Smooth CSS transitions, fade, countdown, and checkmark animation |
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🚀 How to Use
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### 1️⃣ Clone the Repository
 
-# Step 3: Install the necessary dependencies.
-npm i
+```bash
+git clone https://github.com/<your-username>/<your-repo-name>.git
+cd <your-repo-name>
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### 2️⃣ Install Dependencies
+
+If using React + Tailwind:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3️⃣ Run the Demo
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The local server will start and open the 3DS Flow Demo in your browser.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## 🧭 Folder Structure
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```
+3DS_Flow_Demo/
+│
+├── phase1_redirect_screen/       # Pre-OTP redirect / verification
+├── phase2_otp_auth_screen/       # OTP authentication (bank challenge)
+├── phase3_simulation_modal/      # Sandbox modal for QA testing
+├── phase4_result_success/        # Success confirmation
+├── phase5_result_failure/        # Failure / retry page
+└── tokens_components/            # Shared UI tokens and components
+```
 
-## What technologies are used for this project?
+Each folder includes:
 
-This project is built with:
+* Desktop & mobile frames
+* Component specs & motion notes
+* Accessibility & behavior annotations
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+---
 
-## How can I deploy this project?
+## 💬 Key Features
 
-Simply open [Lovable](https://lovable.dev/projects/9e68d3f4-64bf-4c82-9b99-327df040ce4e) and click on Share -> Publish.
+✅ Visa / Mastercard-style 3DS experience
+✅ Secure redirect simulation & countdown timer
+✅ Demo OTP `123456` for sandbox testing
+✅ Auto-redirect & success/failure simulation
+✅ 100% responsive and accessible
+✅ Modular — each phase works standalone
+✅ Developer & auditor-friendly for PCI DSS testing
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 🧠 UX Philosophy
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+The design emphasizes **trust, clarity, and calmness**, mimicking how real banks handle cardholder authentication.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+* Subtle animations — not distracting
+* Clear reassurance messages (“Your details are protected and encrypted”)
+* Transparent but non-alarming language (“Securely verifying your transaction…”)
+* Realistic test flow — OTP, resend delay, countdown timers
+* Smooth transitions between screens (0.4–0.5s fades)
+
+---
+
+## 🧩 Integration Scenarios
+
+You can embed this demo in:
+
+* Payment Gateway SDKs
+* Fintech sandbox environments
+* PCI DSS training modules
+* QA or compliance audit demos
+* Developer testing dashboards
+
+---
+
+## ⚙️ Customization
+
+All shared colors, text, and animations are managed from `/tokens_components/`.
+
+```css
+--accent-blue: #3066f8;
+--success-green: #1ab874;
+--error-red: #e74c3c;
+--radius-card: 12px;
+--font-family: "Inter", "SF Pro", system-ui;
+```
+
+You can easily swap branding, typography, or icons to match your own payment system.
+
+---
+
+## 🧰 Technical Notes
+
+* This demo **does not perform any real transactions**.
+* OTP `123456` is used for test simulation only.
+* The Simulation Modal allows manual success/failure outcomes.
+* Designed to fit microservice-style iframe integration in live Payment Gateway systems.
+
+---
+
+## 📸 Preview
+
+| Phase            | Screenshot                             |
+| ---------------- | -------------------------------------- |
+| Redirect Screen  | ![Redirect Screen](assets/phase1.png)  |
+| OTP Screen       | ![OTP Screen](assets/phase2.png)       |
+| Simulation Modal | ![Simulation Modal](assets/phase3.png) |
+| Success Page     | ![Success](assets/phase4.png)          |
+| Failure Page     | ![Failure](assets/phase5.png)          |
+
+*(Replace paths with your actual hosted images)*
+
+---
+
+## 🏢 About ITIO Innovex Pvt Ltd
+
+**[ITIO Innovex Pvt Ltd](https://www.itio.in)** is a leading fintech technology company specializing in **white-label payment gateway**, **digital banking**, **neo-bank**, and **crypto payment** platforms.
+We provide **ready-made fintech solutions with full source code**, PCI DSS compliance assistance, and scalable microservice architecture for payment processing businesses.
+
+🔹 If you’re looking for a **complete white-label Payment Gateway Source Code**,
+visit 👉 [https://itio.in/payment-gateway-software](https://itio.in/payment-gateway-software)
+
+ITIO Innovex helps startups and enterprises **launch their own payment gateway in record time** — fully customizable, PCI DSS ready, and feature-rich.
+
+---
+
+## 🧾 License
+
+This project is released under the **MIT License**.
+You are free to use, modify, and distribute this design — attribution to
+**“3DS Flow Demo — by ITIO Innovex Pvt Ltd”** is appreciated.
+
+---
