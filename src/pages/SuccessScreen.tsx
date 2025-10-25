@@ -27,15 +27,18 @@ const SuccessScreen = () => {
           </div>
 
           {/* Success message */}
-          <div className="space-y-3">
+          <div className="text-center space-y-2">
             <h1 className="text-2xl font-bold text-foreground">
               Authentication Successful
             </h1>
             <p className="text-sm text-muted-foreground">
-              Your payment has been authenticated. Returning to merchant...
+              Your payment has been authenticated. Returning to merchant…
+            </p>
+            <p className="text-sm text-muted-foreground">
+              You are being redirected to ExampleStore.com.
             </p>
             <p className="text-xs text-muted-foreground">
-              You will be redirected automatically.
+              You don't need to do anything. This window will close automatically in a few seconds.
             </p>
           </div>
 

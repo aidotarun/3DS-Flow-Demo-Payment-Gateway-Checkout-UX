@@ -70,7 +70,7 @@ const OtpAuthScreen = () => {
                 Cardholder Authentication
               </h1>
               <p className="text-sm text-muted-foreground">
-                Please verify your transaction by entering the One-Time Password (OTP) sent to your registered mobile number/email.
+                Please verify your transaction by entering the One-Time Password (OTP) sent to your registered mobile number ending ••45 or your email.
               </p>
             </div>
 
@@ -120,14 +120,22 @@ const OtpAuthScreen = () => {
                 <Input
                   id="otp"
                   type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   maxLength={6}
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
                   placeholder="000000"
                   className="text-center text-2xl font-mono tracking-widest"
+                  aria-describedby="otp-helper"
                 />
-                <div className="text-center text-sm text-muted-foreground">
-                  OTP expires in <CountdownTimer seconds={120} format="mm:ss" />
+                <div id="otp-helper" className="space-y-1">
+                  <div className="text-center text-xs text-muted-foreground">
+                    You have 3 attempts remaining.
+                  </div>
+                  <div className="text-center text-sm text-muted-foreground">
+                    OTP expires in <CountdownTimer seconds={120} format="mm:ss" />
+                  </div>
                 </div>
               </div>
 
@@ -147,8 +155,13 @@ const OtpAuthScreen = () => {
             </form>
 
             {/* Help footer */}
-            <div className="text-center text-xs text-muted-foreground pt-2 border-t border-border">
-              Need help? Contact your bank.
+            <div className="text-center space-y-1 pt-2 border-t border-border">
+              <div className="text-xs text-muted-foreground">
+                No funds will be charged unless authentication succeeds.
+              </div>
+              <div className="text-xs text-muted-foreground">
+                Need help? Contact your bank.
+              </div>
             </div>
           </div>
         </SecureCard>

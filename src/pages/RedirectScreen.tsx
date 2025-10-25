@@ -8,11 +8,12 @@ import { Lock, Loader2 } from "lucide-react";
 const RedirectScreen = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/otp-auth");
-    }, 10000);
+  const handleRedirect = () => {
+    navigate("/otp-auth");
+  };
 
+  useEffect(() => {
+    const timer = setTimeout(handleRedirect, 10000);
     return () => clearTimeout(timer);
   }, [navigate]);
 
@@ -35,19 +36,41 @@ const RedirectScreen = () => {
           </div>
 
           {/* Main message */}
-          <div className="text-center space-y-3">
-            <h1 className="text-xl font-semibold text-foreground">
+          <div className="text-center space-y-2">
+            <h1 className="text-lg md:text-xl font-semibold text-foreground">
               Please wait — we are redirecting you to your bank for authentication.
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm md:text-base text-muted-foreground">
               This may take a few seconds while we verify your transaction for security.
             </p>
+          </div>
+
+          {/* Transaction summary block */}
+          <div className="bg-secondary rounded-lg p-4 space-y-2">
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Amount:</span>
+                <span className="font-semibold text-foreground">INR 1,234.56</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Card:</span>
+                <span className="font-mono text-foreground">•••• 4321</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Merchant:</span>
+                <span className="font-semibold text-foreground">ExampleStore.com</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border">
+              <Lock className="w-3 h-3" />
+              <span>Your details are protected and encrypted.</span>
+            </div>
           </div>
 
           {/* Countdown */}
           <div className="text-center text-sm text-muted-foreground">
             Redirecting to 3D Secure page in{" "}
-            <CountdownTimer seconds={10} /> seconds
+            <CountdownTimer seconds={10} format="seconds" onComplete={handleRedirect} /> seconds
           </div>
         </div>
       </SecureCard>

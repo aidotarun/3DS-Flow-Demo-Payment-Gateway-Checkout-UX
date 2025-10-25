@@ -1,6 +1,7 @@
-# 3DS Flow Design System
+# 3DS Flow Design System - Enhanced UX v2
 
 Complete design tokens and component library for the 3D Secure authentication flow.
+Production-ready for PCI DSS / payment gateway environments.
 
 ## Color Tokens
 
@@ -17,9 +18,9 @@ All colors are defined as HSL values in `src/index.css` for consistency across l
 
 ### Semantic Colors
 ```css
---primary: 214 84% 42%           /* Accent/interactive elements */
---success: 142 76% 36%           /* Success states (green check) */
---destructive: 0 84% 60%         /* Error states (red cross) */
+--primary: 214 84% 42%           /* Accent/interactive elements (trust blue) */
+--success: 142 76% 36%           /* Success states (calm green) */
+--destructive: 0 84% 60%         /* Error states (calm red) */
 --secondary: 220 15% 96%         /* Secondary backgrounds */
 ```
 
@@ -31,6 +32,18 @@ className="bg-card text-foreground border-border"
 
 // ❌ Wrong
 className="bg-white text-black border-gray-300"
+```
+
+### Status & Error State Colors
+```tsx
+// Neutral helper text
+className="text-muted-foreground"
+
+// Error/warning text
+className="text-destructive"
+
+// Success text
+className="text-success"
 ```
 
 ---
@@ -327,7 +340,14 @@ const COPY = {
   headline: "Please wait — we are redirecting you to your bank for authentication.",
   subtext: "This may take a few seconds while we verify your transaction for security.",
   countdown: "Redirecting to 3D Secure page in",
-  secure: "Secure connection"
+  countdownSuffix: "seconds",
+  secure: "Secure connection",
+  transactionSummary: {
+    amount: "Amount:",
+    card: "Card:",
+    merchant: "Merchant:",
+    encryption: "Your details are protected and encrypted."
+  }
 }
 ```
 
@@ -335,13 +355,17 @@ const COPY = {
 ```typescript
 const COPY = {
   title: "Cardholder Authentication",
-  instruction: "Please verify your transaction by entering the One-Time Password (OTP) sent to your registered mobile number/email.",
+  instruction: "Please verify your transaction by entering the One-Time Password (OTP) sent to your registered mobile number ending ••45 or your email.",
   infoLine1: "For demo/testing environment enter: 123456",
   infoLine2: "This is a test environment — no real money will be deducted. The payment gateway is currently in test mode.",
   otpLabel: "Enter OTP",
   otpHelper: "OTP expires in",
+  attemptsRemaining: "You have 3 attempts remaining.",
+  attemptsError: "That code didn't match. You have 2 attempts remaining.",
+  resendCooldown: "You can request a new code in",
   submitButton: "Submit",
   resendButton: "Resend OTP",
+  noChargeNotice: "No funds will be charged unless authentication succeeds.",
   footer: "Need help? Contact your bank.",
   encryption: "Your details are protected and encrypted.",
   cardLabel: "Card:",
@@ -366,7 +390,8 @@ const COPY = {
 const COPY = {
   heading: "Authentication Successful",
   subtext: "Your payment has been authenticated. Returning to merchant…",
-  autoRedirect: "You will be redirected automatically.",
+  merchantRedirect: "You are being redirected to ExampleStore.com.",
+  autoRedirect: "You don't need to do anything. This window will close automatically in a few seconds.",
   button: "Return to Merchant"
 }
 ```
@@ -376,6 +401,9 @@ const COPY = {
 const COPY = {
   heading: "Authentication Failed",
   subtext: "The authentication could not be completed. Please try again or contact your bank.",
+  noChargeHeading: "No money has been charged.",
+  noChargeBody: "Your transaction was not completed and no funds have been deducted from your account.",
+  reasonLabel: "Reason:",
   retryButton: "Retry Authentication",
   returnButton: "Return to Merchant"
 }
@@ -391,30 +419,60 @@ Using Tailwind's default breakpoints:
 - **Tablet:** `sm:` (≥ 640px)
 - **Desktop:** `md:` (≥ 768px)
 
-### Common Patterns
+### Responsive Rules for All Phases
+
+#### Mobile Adaptations (< 640px)
+1. **Card Width**
+   - Expand close to full width with 16px horizontal padding on each side
+   - Max width constraint removed on mobile
+
+2. **Typography**
+   - Headline font size reduces by 2px (20px → 18px or 18px → 16px)
+   - Body text remains readable without zoom
+
+3. **Buttons**
+   - Full width with minimum 44px height
+   - Stacked vertically with 12-16px gap between them
+   - 16px horizontal safe-area padding
+
+4. **Layout Changes**
+   - Two-column layouts (Card / Merchant / Amount) stack vertically
+   - Clear labels positioned above values
+   - Adequate touch spacing between interactive elements
+
+5. **Input Fields**
+   - OTP input triggers numeric keypad (`inputMode="numeric"`)
+   - Large tap targets for input fields
+   - Visible focus rings with sufficient size
+
+### Common Responsive Patterns
 ```tsx
-// Text sizing
+// Text sizing with mobile-first approach
 <h1 className="text-lg md:text-xl">
 
-// Padding
+// Card padding adaptation
 <div className="p-4 md:p-8">
 
-// Layout
-<div className="flex-col md:flex-row">
+// Button layout - stacked on mobile, inline on desktop
+<div className="flex flex-col md:flex-row gap-3 md:gap-4">
 
-// Spacing
-<div className="gap-4 md:gap-6">
+// Transaction summary - vertical on mobile
+<div className="flex flex-col md:flex-row justify-between">
+  <span className="text-muted-foreground">Amount:</span>
+  <span className="font-semibold">INR 1,234.56</span>
+</div>
 ```
 
 ---
 
 ## Accessibility Standards
 
-All components meet WCAG AA requirements:
+All components meet WCAG AA requirements for PCI DSS compliance:
 
 ### Touch Targets
 - Minimum 44px height for all interactive elements
-- Adequate spacing between adjacent buttons
+- Adequate spacing between adjacent buttons (minimum 12-16px vertical gap on mobile)
+- Full-width buttons on mobile with 16px horizontal safe padding
 
 ### Focus States
 ```tsx
@@ -423,18 +481,53 @@ className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ri
 ```
 
 ### Color Contrast
-- Text on white: 4.5:1 minimum ratio
+- Text on white: 4.5:1 minimum ratio (WCAG AA)
 - Primary button: sufficient contrast between text and background
 - Error/success states: distinguishable by text, not just color
+- Focus rings must be visible in both light and dark modes
+
+### Keyboard Navigation
+- All interactive elements must be keyboard accessible
+- Modal dialogs trap focus and can be closed with ESC
+- First focusable element receives focus on page load
+- Tab order follows logical reading sequence
+
+### Mobile Input Behavior
+```tsx
+// OTP input triggers numeric keypad
+<Input 
+  type="text"
+  inputMode="numeric"
+  pattern="[0-9]*"
+/>
+```
 
 ### Screen Reader Support
 ```tsx
+// Phase 1 announcement
+"Secure connection. We are redirecting you to your bank for authentication."
+
+// Phase 2 announcement
+"Cardholder Authentication. Enter the one-time password sent to your registered number ending ••45."
+
+// Phase 4 announcement
+"Authentication Successful. You will be returned to ExampleStore.com."
+
+// Phase 5 announcement
+"Authentication Failed. No money has been charged."
+
 // Semantic HTML
 <button type="button">Submit</button>
-<label htmlFor="otp-input">Enter OTP</label>
+<label htmlFor="otp">Enter OTP</label>
 
-// ARIA labels where needed
-<div role="alert" aria-live="polite">
+// ARIA labels and descriptions
+<Input 
+  id="otp"
+  aria-describedby="otp-helper"
+/>
+<div id="otp-helper" role="status">
+  You have 3 attempts remaining.
+</div>
 ```
 
 ---
@@ -524,11 +617,186 @@ This design system is built for:
 
 ---
 
+## Motion & Transition System
+
+All animations follow a consistent, calm motion language suitable for financial interfaces.
+
+### Animation Tokens
+
+```javascript
+// Defined in tailwind.config.ts
+keyframes: {
+  "progress-fill": {
+    from: { width: "0%" },
+    to: { width: "100%" }
+  },
+  "spin-slow": {
+    from: { transform: "rotate(0deg)" },
+    to: { transform: "rotate(360deg)" }
+  },
+  "fade-in": {
+    from: { opacity: "0", transform: "translateY(10px)" },
+    to: { opacity: "1", transform: "translateY(0)" }
+  }
+}
+```
+
+### Motion Rules by Phase
+
+#### Phase 1: Redirect Screen
+- **Spinner**: Slow, smooth rotation (1s linear infinite) - not nervous
+- **Progress Bar**: Linear fill from 0% → 100% over 10 seconds
+- **Countdown**: Uses monospace/tabular numerals to prevent layout jumping
+- **Transition to Phase 2**: Fade 0.4s ease
+
+#### Phase 2: OTP Screen
+- **Page Load**: Fade in 0.4s ease-out
+- **Submit Action**: Button shows inline spinner for ~0.5s before modal appears
+- **Input Focus**: Smooth focus ring transition 0.2s ease
+- **Error State**: Red border fades in 0.2s, error text appears with subtle slide
+
+#### Phase 3: Simulation Modal
+- **Background**: Blur or dim backdrop
+- **Modal Entry**: Scale from 0.96 → 1.0 + fade in 200-250ms ease-out
+- **Modal Exit**: Reverse animation (scale 1.0 → 0.96 + fade out)
+- **Focus Trap**: First focus goes to modal heading
+
+#### Phase 4: Success Screen
+- **Green Check Icon**: Short "check draw" animation or gentle fade/scale pop-in
+- **Redirect Dots**: Gentle pulse animation looping (indicates "we're working")
+- **Auto-redirect**: Countdown with smooth fade transition after 3 seconds
+
+#### Phase 5: Failure Screen
+- **Red Cross Icon**: Tiny 1-2px horizontal shake once (subtle, not playful)
+- **Error Message**: Fades in with reassurance text
+
+### Transition Timing Reference
+```css
+/* Micro-interactions */
+--transition-fast: 0.15s ease;
+
+/* Standard interactions */
+--transition-base: 0.3s ease;
+
+/* Page transitions */
+--transition-slow: 0.5s ease-out;
+
+/* Progress/loading */
+--transition-linear: linear;
+```
+
+---
+
+## Error States & Status Indicators
+
+### OTP Input Error State
+```tsx
+// Red border around input field
+<Input 
+  className={cn(
+    "text-center text-2xl font-mono tracking-widest",
+    hasError && "border-destructive focus-visible:ring-destructive"
+  )}
+/>
+
+// Error message below input
+<div className="text-xs text-destructive text-center">
+  That code didn't match. You have 2 attempts remaining.
+</div>
+```
+
+### Resend OTP States
+
+**Disabled State (Cooldown Active)**
+```tsx
+<Button 
+  variant="ghost" 
+  disabled
+  className="w-full opacity-50 cursor-not-allowed"
+>
+  Resend OTP
+</Button>
+<p className="text-xs text-muted-foreground text-center">
+  You can request a new code in 00:25
+</p>
+```
+
+**Active State**
+```tsx
+<Button 
+  variant="ghost" 
+  className="w-full"
+  onClick={handleResend}
+>
+  Resend OTP
+</Button>
+```
+
+### Attempt Counter States
+```tsx
+// Normal state (grey text)
+<div className="text-xs text-muted-foreground">
+  You have 3 attempts remaining.
+</div>
+
+// Warning state (amber/orange when 1 attempt left)
+<div className="text-xs text-orange-600">
+  You have 1 attempt remaining.
+</div>
+
+// Error state (red text after failed attempt)
+<div className="text-xs text-destructive">
+  That code didn't match. You have 2 attempts remaining.
+</div>
+```
+
+---
+
+## Trust & Security Microcopy
+
+Standardized reassurance language used consistently across phases:
+
+### Security Reassurance
+```
+"Your details are protected and encrypted."
+```
+- Used in: Phase 1 (transaction summary), Phase 2 (card details block)
+- Always paired with lock icon
+
+### No-Charge Assurance
+```
+"No funds will be charged unless authentication succeeds."
+```
+- Used in: Phase 2 (above footer)
+
+```
+"No money has been charged."
+"Your transaction was not completed and no funds have been deducted from your account."
+```
+- Used in: Phase 5 (failure page)
+
+### Auto-Redirect Assurance
+```
+"You will be redirected automatically."
+"You don't need to do anything. This window will close automatically in a few seconds."
+```
+- Used in: Phase 4 (success page)
+
+### Channel Clarity
+```
+"Please verify your transaction by entering the One-Time Password (OTP) sent to your registered mobile number ending ••45 or your email."
+```
+- Used in: Phase 2 (instruction text)
+- Includes masked phone number for anti-phishing trust
+
+---
+
 ## Design Principles
 
 1. **Trust & Security**: Professional banking aesthetic, never playful
-2. **Clarity**: Clear hierarchy, obvious next steps
-3. **Consistency**: Reuse components, follow tokens
-4. **Accessibility**: WCAG AA compliance, keyboard navigation
-5. **Responsiveness**: Mobile-first, works on all devices
-6. **Performance**: Minimal dependencies, optimized animations
+2. **Clarity**: Clear hierarchy, obvious next steps, reassuring microcopy
+3. **Consistency**: Reuse components, follow tokens, maintain motion language
+4. **Accessibility**: WCAG AA compliance, keyboard navigation, screen reader support
+5. **Responsiveness**: Mobile-first, works on all devices, 44px touch targets
+6. **Performance**: Minimal dependencies, optimized animations, smooth transitions
+7. **Reassurance**: Constant user reassurance about security and no-charge guarantees
