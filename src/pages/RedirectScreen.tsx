@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { SecureCard } from "@/components/ui/secure-card";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { CountdownTimer } from "@/components/CountdownTimer";
-import { Lock, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Lock, Loader2, ArrowLeft } from "lucide-react";
 
 const RedirectScreen = () => {
   const navigate = useNavigate();
@@ -21,6 +22,15 @@ const RedirectScreen = () => {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <SecureCard>
         <div className="space-y-6">
+          {/* Back button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/")}
+            className="absolute top-4 left-4"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
           {/* Header with lock icon */}
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <Lock className="w-4 h-4" />

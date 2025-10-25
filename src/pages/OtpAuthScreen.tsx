@@ -5,7 +5,7 @@ import { InfoBox } from "@/components/InfoBox";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Lock, CreditCard } from "lucide-react";
+import { Lock, CreditCard, ArrowLeft } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -46,6 +46,17 @@ const OtpAuthScreen = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+        {/* Back button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/redirect")}
+          className="mb-4"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back
+        </Button>
+
         {/* Header with logos */}
         <div className="flex items-center justify-between mb-6 px-2">
           <div className="flex items-center gap-2">

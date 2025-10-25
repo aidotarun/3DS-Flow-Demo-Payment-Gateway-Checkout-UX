@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { SecureCard } from "@/components/ui/secure-card";
 import { Button } from "@/components/ui/button";
-import { XCircle } from "lucide-react";
+import { XCircle, ArrowLeft } from "lucide-react";
 
 const FailureScreen = () => {
   const navigate = useNavigate();
@@ -10,6 +10,15 @@ const FailureScreen = () => {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <SecureCard>
         <div className="text-center space-y-6">
+          {/* Back button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/otp-auth")}
+            className="absolute top-4 left-4"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
           {/* Error icon */}
           <div className="flex justify-center">
             <div className="rounded-full bg-destructive/10 p-6">

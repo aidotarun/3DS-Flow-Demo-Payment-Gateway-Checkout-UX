@@ -10,7 +10,7 @@ export const SecureCard = ({ children, className }: SecureCardProps) => {
   return (
     <div
       className={cn(
-        "bg-card rounded-lg shadow-lg border border-border p-8 max-w-md w-full mx-auto animate-fade-in",
+        "bg-card rounded-lg shadow-lg border border-border p-8 max-w-md w-full mx-auto animate-fade-in relative",
         className
       )}
       style={{
